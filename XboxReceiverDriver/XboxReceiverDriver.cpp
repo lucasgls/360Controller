@@ -62,7 +62,17 @@ static const uint8_t kHIDReportDescriptor[] = {
     0x75, 0x01, //   REPORT_SIZE (1)
     0x81, 0x02, //   INPUT (Data,Var,Abs)
 
-    // ── 4 stick axes first: X, Y, Rx, Ry (int16) ───────────────────────────
+    // ── Triggers first: Z, Rz (0-255) — matches struct layout ─────────────
+    0x75, 0x08,       //   REPORT_SIZE (8)
+    0x15, 0x00,       //   LOGICAL_MINIMUM (0)
+    0x26, 0xff, 0x00, //   LOGICAL_MAXIMUM (255)
+    0x95, 0x02,       //   REPORT_COUNT (2)
+    0x05, 0x01,       //   USAGE_PAGE (Generic Desktop)
+    0x09, 0x32,       //   USAGE (Z)  ← LT
+    0x09, 0x35,       //   USAGE (Rz) ← RT
+    0x81, 0x02,       //   INPUT (Data,Var,Abs)
+
+    // ── 4 stick axes: X, Y, Rx, Ry (int16) ─────────────────────────────────
     0x75, 0x10,       //   REPORT_SIZE (16)
     0x16, 0x00, 0x80, //   LOGICAL_MINIMUM (-32768)
     0x26, 0xff, 0x7f, //   LOGICAL_MAXIMUM (32767)
@@ -73,16 +83,6 @@ static const uint8_t kHIDReportDescriptor[] = {
     0x09, 0x33, //   USAGE (Rx)
     0x09, 0x34, //   USAGE (Ry)
     0x81, 0x02, //   INPUT (Data,Var,Abs)
-
-    // ── Triggers after sticks: Z, Rz (0-255) ───────────────────────────────
-    0x75, 0x08,       //   REPORT_SIZE (8)
-    0x15, 0x00,       //   LOGICAL_MINIMUM (0)
-    0x26, 0xff, 0x00, //   LOGICAL_MAXIMUM (255)
-    0x95, 0x02,       //   REPORT_COUNT (2)
-    0x05, 0x01,       //   USAGE_PAGE (Generic Desktop)
-    0x09, 0x32,       //   USAGE (Z)  ← LT
-    0x09, 0x35,       //   USAGE (Rz) ← RT
-    0x81, 0x02,       //   INPUT (Data,Var,Abs)
 
     0xc0 // END_COLLECTION
 };
@@ -474,9 +474,10 @@ void XboxReceiverDriver::ReadComplete_Impl(
         int16_t rx = (int16_t)((uint16_t)d[14] | ((uint16_t)d[15] << 8));
         int16_t ry = (int16_t)((uint16_t)d[16] | ((uint16_t)d[17] << 8));
 
-        // Invert Y axes so pushing stick up yields positive/up in typical consumers.
-        ly = (int16_t)-ly;
-        ry = (int16_t)-ry;
+        // Invert Y axes: use bitwise NOT (~) instead of negation to avoid
+        // int16_t overflow at -32768 (-(INT16_MIN) wraps back to -32768).
+        ly = (int16_t)~ly;
+        ry = (int16_t)~ry;
 
         // RAW diagnostic: log full packet whenever buttons/triggers change
         // so we can map each button empirically.
@@ -501,59 +502,43 @@ void XboxReceiverDriver::ReadComplete_Impl(
           }
         }
 
-        // Button mapping — from ControlStruct.h ButtonBits (verified against
-        // kext source):
-        //   d[6] bit0 = 0x01 = btnShoulderLeft  (LB)
-        //   d[6] bit1 = 0x02 = btnShoulderRight (RB)
-        //   d[6] bit2 = 0x04 = btnXbox          (Guide)
-        //   d[6] bit3 = 0x08 = reserved
-        //   d[6] bit4 = 0x10 = btnA
-        //   d[6] bit5 = 0x20 = btnB
-        //   d[6] bit6 = 0x40 = btnX
-        //   d[6] bit7 = 0x80 = btnY
-        //   d[7] bit0 = 0x01 = btnDigiUp
-        //   d[7] bit1 = 0x02 = btnDigiDown
-        //   d[7] bit2 = 0x04 = btnDigiLeft
-        //   d[7] bit3 = 0x08 = btnDigiRight
-        //   d[7] bit4 = 0x10 = btnStart
-        //   d[7] bit5 = 0x20 = btnBack
-        //   d[7] bit6 = 0x40 = btnHatLeft  (LS click)
-        //   d[7] bit7 = 0x80 = btnHatRight (RS click)
+        // Button mapping — Xbox 360 wireless protocol (ControlStruct.h big-endian,
+        // bits reversed within d[6] vs wired USB HID):
+        //   d[7] = low byte:  bit0=LB, bit1=RB, bit4=A, bit5=B, bit6=X, bit7=Y
+        //   d[6] = high byte (bit-reversed): bit0=RS, bit1=LS,
+        //     bit2=D-Down, bit3=D-Up, bit4=Back, bit5=Start,
+        //     bit6=D-Right, bit7=D-Left  (empirically verified)
         //
-        // Pack buttons as "standard" gamepad ordering:
-        //   0 A, 1 B, 2 X, 3 Y,
-        //   4 LB, 5 RB,
-        //   8 Back, 9 Start, 10 LS, 11 RS,
-        //   12 D-Up, 13 D-Down, 14 D-Left, 15 D-Right
-        // (Guide is not exposed as a standard button here.)
+        // HID button order: 0=A,1=B,2=X,3=Y,4=LB,5=RB,
+        //   8=Back,9=Start,10=LS,11=RS,12=D-Up,13=D-Down,14=D-Left,15=D-Right
         uint16_t hidBtns = 0;
-        if (d[6] & 0x10)
-          hidBtns |= (1u << 0); // A
-        if (d[6] & 0x20)
-          hidBtns |= (1u << 1); // B
-        if (d[6] & 0x40)
-          hidBtns |= (1u << 2); // X
-        if (d[6] & 0x80)
-          hidBtns |= (1u << 3); // Y
-        if (d[6] & 0x01)
-          hidBtns |= (1u << 4); // LB
-        if (d[6] & 0x02)
-          hidBtns |= (1u << 5); // RB
-        if (d[7] & 0x20)
-          hidBtns |= (1u << 8); // Back
         if (d[7] & 0x10)
-          hidBtns |= (1u << 9); // Start
+          hidBtns |= (1u << 0); // A
+        if (d[7] & 0x20)
+          hidBtns |= (1u << 1); // B
         if (d[7] & 0x40)
-          hidBtns |= (1u << 10); // LS
+          hidBtns |= (1u << 2); // X
         if (d[7] & 0x80)
-          hidBtns |= (1u << 11); // RS
+          hidBtns |= (1u << 3); // Y
         if (d[7] & 0x01)
-          hidBtns |= (1u << 12); // D-Up
+          hidBtns |= (1u << 4); // LB
         if (d[7] & 0x02)
+          hidBtns |= (1u << 5); // RB
+        if (d[6] & 0x10)
+          hidBtns |= (1u << 8); // Back
+        if (d[6] & 0x20)
+          hidBtns |= (1u << 9); // Start
+        if (d[6] & 0x80)
+          hidBtns |= (1u << 10); // LS (L3)
+        if (d[6] & 0x04)
+          hidBtns |= (1u << 11); // RS (R3)
+        if (d[6] & 0x40)
+          hidBtns |= (1u << 12); // D-Up
+        if (d[6] & 0x02)
           hidBtns |= (1u << 13); // D-Down
-        if (d[7] & 0x04)
+        if (d[6] & 0x01)
           hidBtns |= (1u << 14); // D-Left
-        if (d[7] & 0x08)
+        if (d[6] & 0x08)
           hidBtns |= (1u << 15); // D-Right
 
         // Build HID report
