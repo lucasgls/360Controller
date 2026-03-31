@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "diag",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["diag-server.py"],
+      "port": 8360
+    }
+  ]
+}

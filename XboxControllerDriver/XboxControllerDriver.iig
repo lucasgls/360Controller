@@ -1,0 +1,33 @@
+/*
+ * XboxControllerDriver.iig
+ * Interface declaration for the DriverKit IIG compiler.
+ *
+ * GPL v2 - see Licence.txt
+ */
+
+#ifndef XboxControllerDriver_h
+#define XboxControllerDriver_h
+
+#include <HIDDriverKit/IOUserHIDDevice.iig>
+#include <DriverKit/OSAction.iig>
+
+class XboxControllerDriver: public IOUserHIDDevice
+{
+public:
+    // Lifecycle
+    virtual kern_return_t Start(IOService *provider) override;
+    virtual kern_return_t Stop(IOService *provider) override;
+
+    // HID overrides
+    virtual OSDictionary * newDeviceDescription() override;
+    virtual OSData       * newReportDescriptor()  override;
+
+    virtual kern_return_t
+    handleReport(uint64_t           timestamp,
+                 IOMemoryDescriptor *report,
+                 uint32_t            reportLength,
+                 IOHIDReportType     reportType,
+                 IOOptionBits        options) override;
+};
+
+#endif /* XboxControllerDriver_h */

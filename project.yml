@@ -1,0 +1,197 @@
+# XboxDriver — xcodegen project spec
+# Gera o projeto Xcode automaticamente: run `xcodegen generate`
+# Requer Xcode instalado com suporte a DriverKit (Xcode 14+)
+
+name: XboxDriver
+options:
+  bundleIdPrefix: com.360Controller
+  deploymentTarget:
+    macOS: "26.0"
+  xcodeVersion: "16"
+  generateEmptyDirectories: true
+  createIntermediateGroups: true
+
+targets:
+
+  XboxDriverApp:
+    type: application
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: XboxDriverApp
+        includes:
+          - "**/*.swift"
+    info:
+      path: XboxDriverApp/Info.plist
+      properties:
+        LSMinimumSystemVersion: "26.0"
+        NSPrincipalClass: NSApplication
+        NSSystemExtensionUsageDescription: >
+          Xbox Driver installs a system extension to enable Xbox 360 wireless
+          controller support via the Wireless Gaming Receiver dongle.
+    entitlements:
+      path: XboxDriverApp/XboxDriverApp.entitlements
+      properties:
+        com.apple.developer.system-extension.install: true
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.360Controller.XboxDriverApp
+      SWIFT_VERSION: "5.0"
+      MACOSX_DEPLOYMENT_TARGET: "26.0"
+      CODE_SIGN_STYLE: Automatic
+      CODE_SIGNING_REQUIRED: YES
+      CODE_SIGN_IDENTITY: "-"
+      AD_HOC_CODE_SIGNING_ALLOWED: YES
+    dependencies:
+      - target: XboxReceiverDriver
+        embed: true
+        codeSign: false
+      - target: XboxControllerDriver
+        embed: true
+        codeSign: false
+    postBuildScripts:
+      - name: "Set SYSX package type on .dext bundles"
+        script: |
+          # macOS 26 sysextd requires FinderInfo bytes 'SYSX' on .dext bundles.
+          # This script applies the correct 4-byte OSType after every build.
+          SYSEXT_DIR="${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Library/SystemExtensions"
+          if [ -d "$SYSEXT_DIR" ]; then
+            python3 - "$SYSEXT_DIR" << 'PYEOF'
+          import sys, ctypes, ctypes.util, os, glob
+          libc = ctypes.CDLL(ctypes.util.find_library('c'), use_errno=True)
+          data = b'SYSX' + b'\x00' * 28
+          buf = ctypes.create_string_buffer(data)
+          sysext_dir = sys.argv[1]
+          for dext in glob.glob(os.path.join(sysext_dir, '*.dext')):
+              ret = libc.setxattr(dext.encode(), b'com.apple.FinderInfo', buf,
+                                  ctypes.c_size_t(32), ctypes.c_uint32(0), ctypes.c_int(0))
+              status = "OK" if ret == 0 else f"FAIL errno={ctypes.get_errno()}"
+              print(f"[SYSX] {status}: {os.path.basename(dext)}")
+          PYEOF
+          fi
+        basedOnDependencyAnalysis: false
+
+
+  XboxReceiverDriver:
+    type: "com.apple.product-type.driver-extension"
+    platform: macOS
+    sources:
+      - path: XboxReceiverDriver
+        includes:
+          - "**/*.iig"
+          - "**/*.cpp"
+          - "**/*.h"
+        excludes:
+          - "Info.plist"
+          - "*.entitlements"
+    info:
+      path: XboxReceiverDriver/Info.plist
+      properties:
+        CFBundlePackageType: DEXT
+        OSBundleUsageDescription: "Xbox 360 Wireless Gaming Receiver USB driver"
+        IOKitPersonalities:
+          XboxReceiverDevice:
+            CFBundleIdentifierKernel: com.apple.kpi.iokit
+            IOClass: AppleUserHIDDevice
+            IOProviderClass: IOUSBHostDevice
+            IOUserClass: XboxReceiverDriver
+            IOUserServerName: com.360Controller.XboxReceiverDriver
+            idVendor: 1118
+            idProduct: 657
+            bDeviceClass: 255
+          XboxReceiverDeviceV2:
+            CFBundleIdentifierKernel: com.apple.kpi.iokit
+            IOClass: AppleUserHIDDevice
+            IOProviderClass: IOUSBHostDevice
+            IOUserClass: XboxReceiverDriver
+            IOUserServerName: com.360Controller.XboxReceiverDriver
+            idVendor: 1118
+            idProduct: 681
+            bDeviceClass: 255
+          XboxReceiverDeviceV3:
+            CFBundleIdentifierKernel: com.apple.kpi.iokit
+            IOClass: AppleUserHIDDevice
+            IOProviderClass: IOUSBHostDevice
+            IOUserClass: XboxReceiverDriver
+            IOUserServerName: com.360Controller.XboxReceiverDriver
+            idVendor: 1118
+            idProduct: 1817
+            bDeviceClass: 255
+    entitlements:
+      path: XboxReceiverDriver/XboxReceiverDriver.entitlements
+      properties:
+        com.apple.developer.driverkit: true
+        com.apple.developer.driverkit.transport.usb: true
+        com.apple.developer.driverkit.family.hid.device: true
+        com.apple.developer.driverkit.family.hid.eventservice: true
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.360Controller.XboxReceiverDriver
+      PRODUCT_NAME: com.360Controller.XboxReceiverDriver
+      SDKROOT: driverkit25.4
+      SUPPORTED_PLATFORMS: driverkit
+      DRIVERKIT_DEPLOYMENT_TARGET: "25.3"
+      ARCHS: arm64
+      IIG_HEADERS_INSTALL_PATH: "$(DEXT_INSTALL_PATH)/$(CONTENTS_FOLDER_PATH)/Headers"
+      LD_RUNPATH_SEARCH_PATHS: "@loader_path/../../"
+      SKIP_INSTALL: NO
+      CODE_SIGNING_REQUIRED: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGN_STYLE: Automatic
+      AD_HOC_CODE_SIGNING_ALLOWED: YES
+      HEADER_SEARCH_PATHS: "$(DERIVED_FILE_DIR) $(inherited)"
+    dependencies:
+      - sdk: DriverKit.framework
+      - sdk: USBDriverKit.framework
+      - sdk: HIDDriverKit.framework
+
+  XboxControllerDriver:
+    type: "com.apple.product-type.driver-extension"
+    platform: macOS
+    sources:
+      - path: XboxControllerDriver
+        includes:
+          - "**/*.iig"
+          - "**/*.cpp"
+          - "**/*.h"
+        excludes:
+          - "Info.plist"
+          - "*.entitlements"
+    info:
+      path: XboxControllerDriver/Info.plist
+      properties:
+        CFBundlePackageType: DEXT
+        OSBundleUsageDescription: "Xbox 360 Wireless Controller HID gamepad driver"
+        IOKitPersonalities:
+          XboxControllerInterface:
+            CFBundleIdentifierKernel: com.apple.kpi.iokit
+            IOClass: AppleUserHIDDevice
+            IOProviderClass: IOUSBHostInterface
+            IOUserClass: XboxControllerDriver
+            IOUserServerName: com.360Controller.XboxControllerDriver
+            idVendor: 1118
+            idProduct: 654
+            bInterfaceClass: 255
+            bInterfaceSubClass: 93
+            bInterfaceProtocol: 1
+    entitlements:
+      path: XboxControllerDriver/XboxControllerDriver.entitlements
+      properties:
+        com.apple.developer.driverkit: true
+        com.apple.developer.driverkit.family.hid.device: true
+        com.apple.developer.driverkit.family.hid.eventservice: true
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.360Controller.XboxControllerDriver
+      PRODUCT_NAME: com.360Controller.XboxControllerDriver
+      SDKROOT: driverkit25.4
+      SUPPORTED_PLATFORMS: driverkit
+      DRIVERKIT_DEPLOYMENT_TARGET: "25.3"
+      ARCHS: arm64
+      IIG_HEADERS_INSTALL_PATH: "$(DEXT_INSTALL_PATH)/$(CONTENTS_FOLDER_PATH)/Headers"
+      LD_RUNPATH_SEARCH_PATHS: "@loader_path/../../"
+      CODE_SIGNING_REQUIRED: YES
+      CODE_SIGN_IDENTITY: "-"
+      CODE_SIGN_STYLE: Automatic
+      AD_HOC_CODE_SIGNING_ALLOWED: YES
+      HEADER_SEARCH_PATHS: "$(DERIVED_FILE_DIR) $(inherited)"
+    dependencies:
+      - sdk: DriverKit.framework
+      - sdk: HIDDriverKit.framework
