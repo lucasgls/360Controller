@@ -80,9 +80,9 @@ static const uint8_t kHIDReportDescriptor[] = {
     0x95, 0x04,       //   REPORT_COUNT (4)
     0x09, 0x30,       //   USAGE (X)
     0x09, 0x31,       //   USAGE (Y)
-    0x09, 0x33, //   USAGE (Rx)
-    0x09, 0x34, //   USAGE (Ry)
-    0x81, 0x02, //   INPUT (Data,Var,Abs)
+    0x09, 0x33,       //   USAGE (Rx)
+    0x09, 0x34,       //   USAGE (Ry)
+    0x81, 0x02,       //   INPUT (Data,Var,Abs)
 
     0xc0 // END_COLLECTION
 };
@@ -502,8 +502,8 @@ void XboxReceiverDriver::ReadComplete_Impl(
           }
         }
 
-        // Button mapping — Xbox 360 wireless protocol (ControlStruct.h big-endian,
-        // bits reversed within d[6] vs wired USB HID):
+        // Button mapping — Xbox 360 wireless protocol (ControlStruct.h
+        // big-endian, bits reversed within d[6] vs wired USB HID):
         //   d[7] = low byte:  bit0=LB, bit1=RB, bit4=A, bit5=B, bit6=X, bit7=Y
         //   d[6] = high byte (bit-reversed): bit0=RS, bit1=LS,
         //     bit2=D-Down, bit3=D-Up, bit4=Back, bit5=Start,
@@ -528,18 +528,24 @@ void XboxReceiverDriver::ReadComplete_Impl(
           hidBtns |= (1u << 8); // Back
         if (d[6] & 0x20)
           hidBtns |= (1u << 9); // Start
-        if (d[6] & 0x80)
-          hidBtns |= (1u << 10); // LS (L3)
-        if (d[6] & 0x04)
-          hidBtns |= (1u << 11); // RS (R3)
-        if (d[6] & 0x40)
-          hidBtns |= (1u << 12); // D-Up
-        if (d[6] & 0x02)
-          hidBtns |= (1u << 13); // D-Down
-        if (d[6] & 0x01)
-          hidBtns |= (1u << 14); // D-Left
-        if (d[6] & 0x08)
-          hidBtns |= (1u << 15); // D-Right
+        // divisao de aguas
+        if (d[6] & 0x08)         // direita
+          hidBtns |= (1u << 14); // D-Right
+
+        if (d[6] & 0x80) // R3
+          hidBtns |= (1u << 10);
+
+        if (d[6] & 0x01)         // cima
+          hidBtns |= (1u << 11); // D-up
+
+        if (d[6] & 0x40) // L3
+          hidBtns |= (1u << 10);
+
+        if (d[6] & 0x02)         // baixo
+          hidBtns |= (1u << 12); // D-down
+
+        if (d[6] & 0x04)         // esquerda
+          hidBtns |= (1u << 13); // left
 
         // Build HID report
         if (s_hidBuf) {
