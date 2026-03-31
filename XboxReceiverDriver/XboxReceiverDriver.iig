@@ -1,0 +1,45 @@
+/*
+ * XboxReceiverDriver.iig
+ * Interface declaration for the DriverKit IIG compiler.
+ * Subclasses IOUserHIDDevice so the controller is published as a HID gamepad.
+ *
+ * GPL v2 - see Licence.txt
+ */
+
+#ifndef XboxReceiverDriver_h
+#define XboxReceiverDriver_h
+
+#include <DriverKit/IOService.iig>
+#include <HIDDriverKit/IOUserHIDDevice.iig>
+#include <USBDriverKit/IOUSBHostDevice.iig>
+#include <USBDriverKit/IOUSBHostInterface.iig>
+#include <USBDriverKit/IOUSBHostPipe.iig>
+#include <DriverKit/OSAction.iig>
+
+class XboxReceiverDriver: public IOUserHIDDevice
+{
+public:
+    // Lifecycle
+    virtual kern_return_t Start(IOService *provider) override;
+    virtual kern_return_t Stop(IOService *provider) override;
+
+    // IOUserHIDDevice overrides
+    virtual OSDictionary * newDeviceDescription(void) override;
+    virtual OSData       * newReportDescriptor(void) override;
+
+    // Async read completion — TYPE binds this to IOUSBHostPipe's async IO callback
+    virtual void
+    ReadComplete(OSAction      *action,
+                 IOReturn       status,
+                 uint32_t       actualByteCount,
+                 uint64_t       completionTimestamp) TYPE(IOUSBHostPipe::CompleteAsyncIO);
+
+    // Async write completion — used for LED / rumble commands on the OUT pipe
+    virtual void
+    WriteComplete(OSAction      *action,
+                  IOReturn       status,
+                  uint32_t       actualByteCount,
+                  uint64_t       completionTimestamp) TYPE(IOUSBHostPipe::CompleteAsyncIO);
+};
+
+#endif /* XboxReceiverDriver_h */

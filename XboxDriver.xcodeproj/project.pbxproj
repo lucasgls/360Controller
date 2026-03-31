@@ -1,0 +1,611 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		012187BB36C160A0D17B6174 /* USBDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA355BC605699F904040F8EB /* USBDriverKit.framework */; };
+		0BAECFCA38101C66B5D3861A /* XboxControllerDriver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5FA1F35DE069C63A431A5548 /* XboxControllerDriver.cpp */; };
+		2040FCD8073099190DCD0C67 /* XboxReceiverDriver.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 058FEE5F008A24EAD139A0FD /* XboxReceiverDriver.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		402F3D8C77304DDB519C3533 /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A001309D870E00CC225F608 /* DriverKit.framework */; };
+		604C4F2BDAA34EB6EC882871 /* XboxControllerDriver.iig in Sources */ = {isa = PBXBuildFile; fileRef = E6CF2CE720F9609643EC933C /* XboxControllerDriver.iig */; };
+		659004E8C89B69E5AA95666E /* XboxControllerDriver.dext in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 89B022845BB9155E962BA418 /* XboxControllerDriver.dext */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		79B6C574EA7C16FF34477BD2 /* XboxReceiverDriver.iig in Sources */ = {isa = PBXBuildFile; fileRef = 8D9ED475B2DF09384BB0B680 /* XboxReceiverDriver.iig */; };
+		7DE892FD18A8286900DBAAB0 /* HIDDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C16BFC6C26B5F6B608493 /* HIDDriverKit.framework */; };
+		90CEDA6A803379298087F1A2 /* XboxDriverApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B0C6AB7BF48447BD6C25A /* XboxDriverApp.swift */; };
+		B6BCE13EB1EB0500C0666115 /* HIDDriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C16BFC6C26B5F6B608493 /* HIDDriverKit.framework */; };
+		FB31AA708FBA62736A22FE0D /* XboxReceiverDriver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 647093753CFA41D9C7BCD49D /* XboxReceiverDriver.cpp */; };
+		FB48FE90982BFB1F2E17C3E7 /* DriverKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A001309D870E00CC225F608 /* DriverKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		ACCFDD212A437443DEC58987 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E3A86B48E7AC134F86616AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C675937DBEFFB29F5E7923D;
+			remoteInfo = XboxReceiverDriver;
+		};
+		B4248CC8D5212B090F57CA3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E3A86B48E7AC134F86616AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2497AECB3710E3DB71BB0ACC;
+			remoteInfo = XboxControllerDriver;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		14C026A68622ACB3E3715B0D /* Embed System Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				2040FCD8073099190DCD0C67 /* XboxReceiverDriver.dext in Embed System Extensions */,
+				659004E8C89B69E5AA95666E /* XboxControllerDriver.dext in Embed System Extensions */,
+			);
+			name = "Embed System Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		058FEE5F008A24EAD139A0FD /* XboxReceiverDriver.dext */ = {isa = PBXFileReference; explicitFileType = "wrapper.driver-extension"; includeInIndex = 0; path = XboxReceiverDriver.dext; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A001309D870E00CC225F608 /* DriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DriverKit.framework; path = System/Library/Frameworks/DriverKit.framework; sourceTree = SDKROOT; };
+		5FA1F35DE069C63A431A5548 /* XboxControllerDriver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XboxControllerDriver.cpp; sourceTree = "<group>"; };
+		602B0C6AB7BF48447BD6C25A /* XboxDriverApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XboxDriverApp.swift; sourceTree = "<group>"; };
+		647093753CFA41D9C7BCD49D /* XboxReceiverDriver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XboxReceiverDriver.cpp; sourceTree = "<group>"; };
+		89B022845BB9155E962BA418 /* XboxControllerDriver.dext */ = {isa = PBXFileReference; explicitFileType = "wrapper.driver-extension"; includeInIndex = 0; path = XboxControllerDriver.dext; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D9ED475B2DF09384BB0B680 /* XboxReceiverDriver.iig */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.iig; path = XboxReceiverDriver.iig; sourceTree = "<group>"; };
+		AA355BC605699F904040F8EB /* USBDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = USBDriverKit.framework; path = System/Library/Frameworks/USBDriverKit.framework; sourceTree = SDKROOT; };
+		D165E9A4D5FABC69A5E5F60F /* XboxDriverApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XboxDriverApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D44C16BFC6C26B5F6B608493 /* HIDDriverKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HIDDriverKit.framework; path = System/Library/Frameworks/HIDDriverKit.framework; sourceTree = SDKROOT; };
+		E6CF2CE720F9609643EC933C /* XboxControllerDriver.iig */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.iig; path = XboxControllerDriver.iig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2A8883D03B1B58781A62DC97 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				402F3D8C77304DDB519C3533 /* DriverKit.framework in Frameworks */,
+				B6BCE13EB1EB0500C0666115 /* HIDDriverKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D5205498D946BDCED95BA3A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB48FE90982BFB1F2E17C3E7 /* DriverKit.framework in Frameworks */,
+				012187BB36C160A0D17B6174 /* USBDriverKit.framework in Frameworks */,
+				7DE892FD18A8286900DBAAB0 /* HIDDriverKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0D89C21A57C0C7DC1D34F563 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				89B022845BB9155E962BA418 /* XboxControllerDriver.dext */,
+				D165E9A4D5FABC69A5E5F60F /* XboxDriverApp.app */,
+				058FEE5F008A24EAD139A0FD /* XboxReceiverDriver.dext */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		54C17D5109E7E7837408B6CC = {
+			isa = PBXGroup;
+			children = (
+				94DF35E218957ED692EFCD63 /* XboxControllerDriver */,
+				6D15538F98CD44C6C82BF125 /* XboxDriverApp */,
+				A0F888D4E52AD77D227A6A8A /* XboxReceiverDriver */,
+				65F047C2C8DCDB60DEA0EE3B /* Frameworks */,
+				0D89C21A57C0C7DC1D34F563 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		65F047C2C8DCDB60DEA0EE3B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4A001309D870E00CC225F608 /* DriverKit.framework */,
+				D44C16BFC6C26B5F6B608493 /* HIDDriverKit.framework */,
+				AA355BC605699F904040F8EB /* USBDriverKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6D15538F98CD44C6C82BF125 /* XboxDriverApp */ = {
+			isa = PBXGroup;
+			children = (
+				602B0C6AB7BF48447BD6C25A /* XboxDriverApp.swift */,
+			);
+			path = XboxDriverApp;
+			sourceTree = "<group>";
+		};
+		94DF35E218957ED692EFCD63 /* XboxControllerDriver */ = {
+			isa = PBXGroup;
+			children = (
+				5FA1F35DE069C63A431A5548 /* XboxControllerDriver.cpp */,
+				E6CF2CE720F9609643EC933C /* XboxControllerDriver.iig */,
+			);
+			path = XboxControllerDriver;
+			sourceTree = "<group>";
+		};
+		A0F888D4E52AD77D227A6A8A /* XboxReceiverDriver */ = {
+			isa = PBXGroup;
+			children = (
+				647093753CFA41D9C7BCD49D /* XboxReceiverDriver.cpp */,
+				8D9ED475B2DF09384BB0B680 /* XboxReceiverDriver.iig */,
+			);
+			path = XboxReceiverDriver;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2497AECB3710E3DB71BB0ACC /* XboxControllerDriver */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9BC5DFE4354D848F2F6FC0D /* Build configuration list for PBXNativeTarget "XboxControllerDriver" */;
+			buildPhases = (
+				FF1BA6EAF90E1991D759185B /* Sources */,
+				2A8883D03B1B58781A62DC97 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XboxControllerDriver;
+			packageProductDependencies = (
+			);
+			productName = XboxControllerDriver;
+			productReference = 89B022845BB9155E962BA418 /* XboxControllerDriver.dext */;
+			productType = "com.apple.product-type.driver-extension";
+		};
+		5B82DADE1DD7297911B6443C /* XboxDriverApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 726E16A86326738CBEE639AD /* Build configuration list for PBXNativeTarget "XboxDriverApp" */;
+			buildPhases = (
+				61C0DA8A9F90587AC02B871D /* Sources */,
+				14C026A68622ACB3E3715B0D /* Embed System Extensions */,
+				4E42B879885023560820DA3A /* Set SYSX package type on .dext bundles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8D1B08B61966891F7DB33295 /* PBXTargetDependency */,
+				86BD85D223D218C1196745B4 /* PBXTargetDependency */,
+			);
+			name = XboxDriverApp;
+			packageProductDependencies = (
+			);
+			productName = XboxDriverApp;
+			productReference = D165E9A4D5FABC69A5E5F60F /* XboxDriverApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8C675937DBEFFB29F5E7923D /* XboxReceiverDriver */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14320A91F0422937F3A682CB /* Build configuration list for PBXNativeTarget "XboxReceiverDriver" */;
+			buildPhases = (
+				DB2F95AB4E518BE64A40DDAA /* Sources */,
+				2D5205498D946BDCED95BA3A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XboxReceiverDriver;
+			packageProductDependencies = (
+			);
+			productName = XboxReceiverDriver;
+			productReference = 058FEE5F008A24EAD139A0FD /* XboxReceiverDriver.dext */;
+			productType = "com.apple.product-type.driver-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4E3A86B48E7AC134F86616AD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					2497AECB3710E3DB71BB0ACC = {
+						ProvisioningStyle = Automatic;
+					};
+					5B82DADE1DD7297911B6443C = {
+						ProvisioningStyle = Automatic;
+					};
+					8C675937DBEFFB29F5E7923D = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = CDB4E9D771F760FB34745BDF /* Build configuration list for PBXProject "XboxDriver" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 54C17D5109E7E7837408B6CC;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 0D89C21A57C0C7DC1D34F563 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2497AECB3710E3DB71BB0ACC /* XboxControllerDriver */,
+				5B82DADE1DD7297911B6443C /* XboxDriverApp */,
+				8C675937DBEFFB29F5E7923D /* XboxReceiverDriver */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4E42B879885023560820DA3A /* Set SYSX package type on .dext bundles */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Set SYSX package type on .dext bundles";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# macOS 26 sysextd requires FinderInfo bytes 'SYSX' on .dext bundles.\n# This script applies the correct 4-byte OSType after every build.\nSYSEXT_DIR=\"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Library/SystemExtensions\"\nif [ -d \"$SYSEXT_DIR\" ]; then\n  python3 - \"$SYSEXT_DIR\" << 'PYEOF'\nimport sys, ctypes, ctypes.util, os, glob\nlibc = ctypes.CDLL(ctypes.util.find_library('c'), use_errno=True)\ndata = b'SYSX' + b'\\x00' * 28\nbuf = ctypes.create_string_buffer(data)\nsysext_dir = sys.argv[1]\nfor dext in glob.glob(os.path.join(sysext_dir, '*.dext')):\n    ret = libc.setxattr(dext.encode(), b'com.apple.FinderInfo', buf,\n                        ctypes.c_size_t(32), ctypes.c_uint32(0), ctypes.c_int(0))\n    status = \"OK\" if ret == 0 else f\"FAIL errno={ctypes.get_errno()}\"\n    print(f\"[SYSX] {status}: {os.path.basename(dext)}\")\nPYEOF\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		61C0DA8A9F90587AC02B871D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				90CEDA6A803379298087F1A2 /* XboxDriverApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB2F95AB4E518BE64A40DDAA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB31AA708FBA62736A22FE0D /* XboxReceiverDriver.cpp in Sources */,
+				79B6C574EA7C16FF34477BD2 /* XboxReceiverDriver.iig in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF1BA6EAF90E1991D759185B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0BAECFCA38101C66B5D3861A /* XboxControllerDriver.cpp in Sources */,
+				604C4F2BDAA34EB6EC882871 /* XboxControllerDriver.iig in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		86BD85D223D218C1196745B4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2497AECB3710E3DB71BB0ACC /* XboxControllerDriver */;
+			targetProxy = B4248CC8D5212B090F57CA3D /* PBXContainerItemProxy */;
+		};
+		8D1B08B61966891F7DB33295 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C675937DBEFFB29F5E7923D /* XboxReceiverDriver */;
+			targetProxy = ACCFDD212A437443DEC58987 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		033047A6A0F3115ED6D2D67A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ARCHS = arm64;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = XboxControllerDriver/XboxControllerDriver.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DRIVERKIT_DEPLOYMENT_TARGET = 25.3;
+				HEADER_SEARCH_PATHS = "$(DERIVED_FILE_DIR) $(inherited)";
+				IIG_HEADERS_INSTALL_PATH = "$(DEXT_INSTALL_PATH)/$(CONTENTS_FOLDER_PATH)/Headers";
+				INFOPLIST_FILE = XboxControllerDriver/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../";
+				PRODUCT_BUNDLE_IDENTIFIER = com.360Controller.XboxControllerDriver;
+				PRODUCT_NAME = com.360Controller.XboxControllerDriver;
+				SDKROOT = driverkit25.4;
+				SUPPORTED_PLATFORMS = driverkit;
+			};
+			name = Release;
+		};
+		22E4C2EBBE254E08A7A8E2C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3E576B619E6C166D9BCE5586 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ARCHS = arm64;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = XboxReceiverDriver/XboxReceiverDriver.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DRIVERKIT_DEPLOYMENT_TARGET = 25.3;
+				HEADER_SEARCH_PATHS = "$(DERIVED_FILE_DIR) $(inherited)";
+				IIG_HEADERS_INSTALL_PATH = "$(DEXT_INSTALL_PATH)/$(CONTENTS_FOLDER_PATH)/Headers";
+				INFOPLIST_FILE = XboxReceiverDriver/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../";
+				PRODUCT_BUNDLE_IDENTIFIER = com.360Controller.XboxReceiverDriver;
+				PRODUCT_NAME = com.360Controller.XboxReceiverDriver;
+				SDKROOT = driverkit25.4;
+				SKIP_INSTALL = NO;
+				SUPPORTED_PLATFORMS = driverkit;
+			};
+			name = Release;
+		};
+		55E6F135ED47B508EC8619A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		70A7D3300FDEB7A250886532 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = XboxDriverApp/XboxDriverApp.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = XboxDriverApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.360Controller.XboxDriverApp;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		9EF1E839F4001A0F6ECA7AAC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ARCHS = arm64;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = XboxControllerDriver/XboxControllerDriver.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DRIVERKIT_DEPLOYMENT_TARGET = 25.3;
+				HEADER_SEARCH_PATHS = "$(DERIVED_FILE_DIR) $(inherited)";
+				IIG_HEADERS_INSTALL_PATH = "$(DEXT_INSTALL_PATH)/$(CONTENTS_FOLDER_PATH)/Headers";
+				INFOPLIST_FILE = XboxControllerDriver/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../";
+				PRODUCT_BUNDLE_IDENTIFIER = com.360Controller.XboxControllerDriver;
+				PRODUCT_NAME = com.360Controller.XboxControllerDriver;
+				SDKROOT = driverkit25.4;
+				SUPPORTED_PLATFORMS = driverkit;
+			};
+			name = Debug;
+		};
+		CCD046C509A333DF06E4EFD5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = XboxDriverApp/XboxDriverApp.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = XboxDriverApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.360Controller.XboxDriverApp;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		EBE8667F6A928A01082F7B43 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ARCHS = arm64;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = XboxReceiverDriver/XboxReceiverDriver.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DRIVERKIT_DEPLOYMENT_TARGET = 25.3;
+				HEADER_SEARCH_PATHS = "$(DERIVED_FILE_DIR) $(inherited)";
+				IIG_HEADERS_INSTALL_PATH = "$(DEXT_INSTALL_PATH)/$(CONTENTS_FOLDER_PATH)/Headers";
+				INFOPLIST_FILE = XboxReceiverDriver/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../";
+				PRODUCT_BUNDLE_IDENTIFIER = com.360Controller.XboxReceiverDriver;
+				PRODUCT_NAME = com.360Controller.XboxReceiverDriver;
+				SDKROOT = driverkit25.4;
+				SKIP_INSTALL = NO;
+				SUPPORTED_PLATFORMS = driverkit;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		14320A91F0422937F3A682CB /* Build configuration list for PBXNativeTarget "XboxReceiverDriver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EBE8667F6A928A01082F7B43 /* Debug */,
+				3E576B619E6C166D9BCE5586 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		726E16A86326738CBEE639AD /* Build configuration list for PBXNativeTarget "XboxDriverApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70A7D3300FDEB7A250886532 /* Debug */,
+				CCD046C509A333DF06E4EFD5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C9BC5DFE4354D848F2F6FC0D /* Build configuration list for PBXNativeTarget "XboxControllerDriver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9EF1E839F4001A0F6ECA7AAC /* Debug */,
+				033047A6A0F3115ED6D2D67A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CDB4E9D771F760FB34745BDF /* Build configuration list for PBXProject "XboxDriver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22E4C2EBBE254E08A7A8E2C4 /* Debug */,
+				55E6F135ED47B508EC8619A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4E3A86B48E7AC134F86616AD /* Project object */;
+}
