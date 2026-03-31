@@ -502,50 +502,28 @@ void XboxReceiverDriver::ReadComplete_Impl(
           }
         }
 
-        // Button mapping — Xbox 360 wireless protocol (ControlStruct.h
-        // big-endian, bits reversed within d[6] vs wired USB HID):
-        //   d[7] = low byte:  bit0=LB, bit1=RB, bit4=A, bit5=B, bit6=X, bit7=Y
-        //   d[6] = high byte (bit-reversed): bit0=RS, bit1=LS,
-        //     bit2=D-Down, bit3=D-Up, bit4=Back, bit5=Start,
-        //     bit6=D-Right, bit7=D-Left  (empirically verified)
-        //
-        // HID button order: 0=A,1=B,2=X,3=Y,4=LB,5=RB,
-        //   8=Back,9=Start,10=LS,11=RS,12=D-Up,13=D-Down,14=D-Left,15=D-Right
+        // Button mapping — Xbox 360 wireless protocol
+        // d[7]: face buttons + shoulders
+        // d[6]: menu buttons + D-pad + stick clicks
+        // HID button indices:
+        //   0=A, 1=B, 2=X, 3=Y, 4=LB, 5=RB, 6=LS, 7=RS,
+        //   8=Back, 9=Start, 10=Guide, 11-14=D-pad (U/D/L/R)
         uint16_t hidBtns = 0;
-        if (d[7] & 0x10)
-          hidBtns |= (1u << 0); // A
-        if (d[7] & 0x20)
-          hidBtns |= (1u << 1); // B
-        if (d[7] & 0x40)
-          hidBtns |= (1u << 2); // X
-        if (d[7] & 0x80)
-          hidBtns |= (1u << 3); // Y
-        if (d[7] & 0x01)
-          hidBtns |= (1u << 4); // LB
-        if (d[7] & 0x02)
-          hidBtns |= (1u << 5); // RB
-        if (d[6] & 0x10)
-          hidBtns |= (1u << 8); // Back
-        if (d[6] & 0x20)
-          hidBtns |= (1u << 9); // Start
-        // divisao de aguas
-        if (d[6] & 0x08)         // direita
-          hidBtns |= (1u << 14); // D-Right
-
-        if (d[6] & 0x80) // R3
-          hidBtns |= (1u << 10);
-
-        if (d[6] & 0x01)         // cima
-          hidBtns |= (1u << 11); // D-up
-
-        if (d[6] & 0x40) // L3
-          hidBtns |= (1u << 10);
-
-        if (d[6] & 0x02)         // baixo
-          hidBtns |= (1u << 12); // D-down
-
-        if (d[6] & 0x04)         // esquerda
-          hidBtns |= (1u << 13); // left
+        if (d[7] & 0x10) hidBtns |= (1u << 0);  // A
+        if (d[7] & 0x20) hidBtns |= (1u << 1);  // B
+        if (d[7] & 0x40) hidBtns |= (1u << 2);  // X
+        if (d[7] & 0x80) hidBtns |= (1u << 3);  // Y
+        if (d[7] & 0x01) hidBtns |= (1u << 4);  // LB
+        if (d[7] & 0x02) hidBtns |= (1u << 5);  // RB
+        if (d[6] & 0x40) hidBtns |= (1u << 6);  // LS (L3)
+        if (d[6] & 0x80) hidBtns |= (1u << 7);  // RS (R3)
+        if (d[6] & 0x10) hidBtns |= (1u << 8);  // Back
+        if (d[6] & 0x20) hidBtns |= (1u << 9);  // Start
+        if (d[7] & 0x04) hidBtns |= (1u << 10); // Guide
+        if (d[6] & 0x01) hidBtns |= (1u << 11); // D-Up
+        if (d[6] & 0x02) hidBtns |= (1u << 12); // D-Down
+        if (d[6] & 0x04) hidBtns |= (1u << 13); // D-Left
+        if (d[6] & 0x08) hidBtns |= (1u << 14); // D-Right
 
         // Build HID report
         if (s_hidBuf) {
