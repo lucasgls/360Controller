@@ -96,7 +96,7 @@ targets:
             IOUserClass: XboxReceiverDriver
             IOUserServerName: com.360Controller.XboxReceiverDriver
             idVendor: 1118
-            idProduct: 654
+            idProduct: 657
             bDeviceClass: 255
           XboxReceiverDeviceV2:
             CFBundleIdentifierKernel: com.apple.kpi.iokit
@@ -106,6 +106,15 @@ targets:
             IOUserServerName: com.360Controller.XboxReceiverDriver
             idVendor: 1118
             idProduct: 681
+            bDeviceClass: 255
+          XboxReceiverDeviceV3:
+            CFBundleIdentifierKernel: com.apple.kpi.iokit
+            IOClass: AppleUserHIDDevice
+            IOProviderClass: IOUSBHostDevice
+            IOUserClass: XboxReceiverDriver
+            IOUserServerName: com.360Controller.XboxReceiverDriver
+            idVendor: 1118
+            idProduct: 1817
             bDeviceClass: 255
     entitlements:
       path: XboxReceiverDriver/XboxReceiverDriver.entitlements

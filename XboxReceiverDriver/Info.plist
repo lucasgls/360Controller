@@ -35,7 +35,7 @@
 			<key>bDeviceClass</key>
 			<integer>255</integer>
 			<key>idProduct</key>
-			<integer>654</integer>
+			<integer>657</integer>
 			<key>idVendor</key>
 			<integer>1118</integer>
 		</dict>
@@ -55,6 +55,25 @@
 			<integer>255</integer>
 			<key>idProduct</key>
 			<integer>681</integer>
+			<key>idVendor</key>
+			<integer>1118</integer>
+		</dict>
+		<key>XboxReceiverDeviceV3</key>
+		<dict>
+			<key>CFBundleIdentifierKernel</key>
+			<string>com.apple.kpi.iokit</string>
+			<key>IOClass</key>
+			<string>AppleUserHIDDevice</string>
+			<key>IOProviderClass</key>
+			<string>IOUSBHostDevice</string>
+			<key>IOUserClass</key>
+			<string>XboxReceiverDriver</string>
+			<key>IOUserServerName</key>
+			<string>com.360Controller.XboxReceiverDriver</string>
+			<key>bDeviceClass</key>
+			<integer>255</integer>
+			<key>idProduct</key>
+			<integer>1817</integer>
 			<key>idVendor</key>
 			<integer>1118</integer>
 		</dict>

@@ -166,10 +166,15 @@ OSDictionary *XboxControllerDriver::newDeviceDescription() {
   dict->setObject("VendorID", OSNumber::withNumber((uint64_t)0x045E, 32));
   dict->setObject("ProductID", OSNumber::withNumber((uint64_t)0x028E, 32));
   dict->setObject("VersionNumber", OSNumber::withNumber((uint64_t)0x0114, 32));
-  dict->setObject("PrimaryUsagePage", OSNumber::withNumber((uint64_t)0x01, 32));
-  dict->setObject("PrimaryUsage", OSNumber::withNumber((uint64_t)0x05, 32));
+  // This driver is an internal helper for the receiver stack.
+  // We intentionally do NOT advertise as a standard gamepad to avoid
+  // duplicate devices in GameController/Web Gamepad API.
+  dict->setObject("PrimaryUsagePage",
+                  OSNumber::withNumber((uint64_t)0xFF00, 32)); // Vendor-defined
+  dict->setObject("PrimaryUsage", OSNumber::withNumber((uint64_t)0x01, 32));
   dict->setObject("Manufacturer", OSString::withCString("Microsoft"));
-  dict->setObject("Product", OSString::withCString("Wireless 360 Controller"));
+  dict->setObject("Product",
+                  OSString::withCString("Wireless 360 Controller (internal)"));
   dict->setObject("Transport", OSString::withCString("Wireless"));
 
   return dict;

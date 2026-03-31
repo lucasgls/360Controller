@@ -30,63 +30,88 @@
 static const uint32_t kReadBufSize = 32;
 static const uint32_t kWriteBufSize = 12;
 
-// ── HID report descriptor for a standard gamepad ─────────────────────────────
+// ── HID report descriptor — Xbox 360-style layout ────────────────────────────
+// Keep the HID descriptor and the bit packing in sync. We expose:
+// - 16 digital buttons in a fixed Xbox 360 order (dpad/start/back/LS/RS/LB/RB/Guide/A/B/X/Y)
+// - 2 analog triggers (Z/Rz, 0-255)
+// - 2 sticks (X/Y and Rx/Ry, int16)
+//
 // Input report (13 bytes total):
 //   Byte 0:     Report ID (1)
-//   Byte 1-2:   Buttons (16 bits)
-//   Byte 3:     Left Trigger (0-255)
+//   Byte 1-2:   Buttons (16 bits, per descriptor order below)
+//   Byte 3:     Left Trigger  (0-255)
 //   Byte 4:     Right Trigger (0-255)
-//   Byte 5-6:   Left Stick X (int16)
-//   Byte 7-8:   Left Stick Y (int16)
+//   Byte 5-6:   Left Stick X  (int16)
+//   Byte 7-8:   Left Stick Y  (int16)  (we invert in software for "up is up")
 //   Byte 9-10:  Right Stick X (int16)
-//   Byte 11-12: Right Stick Y (int16)
+//   Byte 11-12: Right Stick Y (int16) (we invert in software for "up is up")
 
 static const uint8_t kHIDReportDescriptor[] = {
-    0x05, 0x01, // Usage Page (Generic Desktop)
-    0x09, 0x05, // Usage (Gamepad)
-    0xA1, 0x01, // Collection (Application)
-    0x85, 0x01, //   Report ID (1)
+    0x05, 0x01, // USAGE_PAGE (Generic Desktop)
+    0x09, 0x05, // USAGE (Game Pad)
+    0xa1, 0x01, // COLLECTION (Application)
+    0x85, 0x01, //   REPORT_ID (1)
 
-    // ── 16 buttons ───────────────────────────────────────────────────────
-    0x05, 0x09, //   Usage Page (Button)
-    0x19, 0x01, //   Usage Minimum (1)
-    0x29, 0x10, //   Usage Maximum (16)
-    0x15, 0x00, //   Logical Minimum (0)
-    0x25, 0x01, //   Logical Maximum (1)
-    0x95, 0x10, //   Report Count (16)
-    0x75, 0x01, //   Report Size (1)
-    0x81, 0x02, //   Input (Data, Variable, Absolute)
+    // ── Grupo 1: D-pad — Up, Down, Left, Right (Buttons 1–4) ────────────────
+    0x75, 0x01, //   REPORT_SIZE (1)
+    0x15, 0x00, //   LOGICAL_MINIMUM (0)
+    0x25, 0x01, //   LOGICAL_MAXIMUM (1)
+    0x95, 0x04, //   REPORT_COUNT (4)
+    0x05, 0x09, //   USAGE_PAGE (Button)
+    0x19, 0x01, //   USAGE_MINIMUM (Button 1)
+    0x29, 0x04, //   USAGE_MAXIMUM (Button 4)
+    0x81, 0x02, //   INPUT (Data,Var,Abs)
 
-    // ── 2 triggers (0-255) ───────────────────────────────────────────────
-    // Use Z / Rz for triggers (common for "standard" mapping).
-    0x05, 0x01,       //   Usage Page (Generic Desktop)
-    0x09, 0x32,       //   Usage (Z)  - Left Trigger
-    0x09, 0x35,       //   Usage (Rz) - Right Trigger
-    0x15, 0x00,       //   Logical Minimum (0)
-    0x26, 0xFF, 0x00, //   Logical Maximum (255)
-    0x95, 0x02,       //   Report Count (2)
-    0x75, 0x08,       //   Report Size (8)
-    0x81, 0x02,       //   Input (Data, Variable, Absolute)
+    // ── Grupo 2: Start, Back, LS, RS (Buttons 5–8) ──────────────────────────
+    0x95, 0x04, //   REPORT_COUNT (4)
+    0x09, 0x05, //   USAGE (Button 5)  ← Start
+    0x09, 0x06, //   USAGE (Button 6)  ← Back
+    0x09, 0x07, //   USAGE (Button 7)  ← LS
+    0x09, 0x08, //   USAGE (Button 8)  ← RS
+    0x81, 0x02, //   INPUT (Data,Var,Abs)
 
-    // ── Left stick X,Y (int16) ───────────────────────────────────────────
-    0x09, 0x30,       //   Usage (X)
-    0x09, 0x31,       //   Usage (Y)
-    0x16, 0x00, 0x80, //   Logical Minimum (-32768)
-    0x26, 0xFF, 0x7F, //   Logical Maximum (32767)
-    0x95, 0x02,       //   Report Count (2)
-    0x75, 0x10,       //   Report Size (16)
-    0x81, 0x02,       //   Input (Data, Variable, Absolute)
+    // ── Grupo 3: LB, RB, Guide (Buttons 9–11) + padding 1 bit ──────────────
+    0x95, 0x03, //   REPORT_COUNT (3)
+    0x09, 0x09, //   USAGE (Button 9)   ← LB
+    0x09, 0x0a, //   USAGE (Button 10)  ← RB
+    0x09, 0x0b, //   USAGE (Button 11)  ← Guide
+    0x81, 0x02, //   INPUT (Data,Var,Abs)
+    0x95, 0x01, //   REPORT_COUNT (1)
+    0x81, 0x01, //   INPUT (Cnst,Ary,Abs) — padding bit
 
-    // ── Right stick X,Y (int16) ──────────────────────────────────────────
-    0x09, 0x33,       //   Usage (Rx) - Right X
-    0x09, 0x34,       //   Usage (Ry) - Right Y
-    0x16, 0x00, 0x80, //   Logical Minimum (-32768)
-    0x26, 0xFF, 0x7F, //   Logical Maximum (32767)
-    0x95, 0x02,       //   Report Count (2)
-    0x75, 0x10,       //   Report Size (16)
-    0x81, 0x02,       //   Input (Data, Variable, Absolute)
+    // ── Grupo 4: A, B, X, Y (Buttons 12–15) ────────────────────────────────
+    0x95, 0x04, //   REPORT_COUNT (4)
+    0x19, 0x0c, //   USAGE_MINIMUM (Button 12) ← A
+    0x29, 0x0f, //   USAGE_MAXIMUM (Button 15) ← Y
+    0x81, 0x02, //   INPUT (Data,Var,Abs)
 
-    0xC0 // End Collection
+    // ── Triggers: LT (Z) and RT (Rz) — 8 bits each ─────────────────────────
+    0x75, 0x08,       //   REPORT_SIZE (8)
+    0x15, 0x00,       //   LOGICAL_MINIMUM (0)
+    0x26, 0xff, 0x00, //   LOGICAL_MAXIMUM (255)
+    0x95, 0x02,       //   REPORT_COUNT (2)
+    0x05, 0x01,       //   USAGE_PAGE (Generic Desktop)
+    0x09, 0x32,       //   USAGE (Z)  ← LT
+    0x09, 0x35,       //   USAGE (Rz) ← RT
+    0x81, 0x02,       //   INPUT (Data,Var,Abs)
+
+    // ── Left stick: X, Y — 16 bits each ────────────────────────────────────
+    0x75, 0x10,       //   REPORT_SIZE (16)
+    0x16, 0x00, 0x80, //   LOGICAL_MINIMUM (-32768)
+    0x26, 0xff, 0x7f, //   LOGICAL_MAXIMUM (32767)
+    0x95, 0x02,       //   REPORT_COUNT (2)
+    0x05, 0x01,       //   USAGE_PAGE (Generic Desktop)
+    0x09, 0x30,       //   USAGE (X)
+    0x09, 0x31,       //   USAGE (Y)
+    0x81, 0x02,       //   INPUT (Data,Var,Abs)
+
+    // ── Right stick: Rx, Ry — 16 bits each ─────────────────────────────────
+    0x95, 0x02, //   REPORT_COUNT (2)
+    0x09, 0x33, //   USAGE (Rx)
+    0x09, 0x34, //   USAGE (Ry)
+    0x81, 0x02, //   INPUT (Data,Var,Abs)
+
+    0xc0 // END_COLLECTION
 };
 
 // ── HID report buffer ────────────────────────────────────────────────────────
@@ -476,6 +501,10 @@ void XboxReceiverDriver::ReadComplete_Impl(
         int16_t rx = (int16_t)((uint16_t)d[14] | ((uint16_t)d[15] << 8));
         int16_t ry = (int16_t)((uint16_t)d[16] | ((uint16_t)d[17] << 8));
 
+        // Invert Y axes so pushing stick up yields positive/up in typical consumers.
+        ly = (int16_t)-ly;
+        ry = (int16_t)-ry;
+
         // RAW diagnostic: log full packet whenever buttons/triggers change
         // so we can map each button empirically.
         // Format: RAW d6=XX d7=XX bits=b15..b0 LT=XX RT=XX
@@ -518,40 +547,50 @@ void XboxReceiverDriver::ReadComplete_Impl(
         //   d[7] bit6 = 0x40 = btnHatLeft  (LS click)
         //   d[7] bit7 = 0x80 = btnHatRight (RS click)
         //
-        // HID "standard" button ordering (most browsers/frameworks):
-        //   0 A,1 B,2 X,3 Y, 4 LB,5 RB, 8 Back,9 Start,10 LS,11 RS,
-        //   12 D-Up,13 D-Down,14 D-Left,15 D-Right
-        // Triggers are exposed as analog axes (Z/Rz), not as buttons.
-        // Guide (Xbox button) is not exposed as a standard button here.
+        // Pack buttons exactly as described by kHIDReportDescriptor:
+        // - Buttons 1-4:  D-Up, D-Down, D-Left, D-Right
+        // - Buttons 5-8:  Start, Back, LS, RS
+        // - Buttons 9-11: LB, RB, Guide
+        // - 1 padding bit
+        // - Buttons 12-15: A, B, X, Y
+        //
+        // Bit positions in the 16-bit field:
+        //   bit0..3   -> Buttons 1..4
+        //   bit4..7   -> Buttons 5..8
+        //   bit8..10  -> Buttons 9..11
+        //   bit11     -> padding
+        //   bit12..15 -> Buttons 12..15
         uint16_t hidBtns = 0;
-        if (d[6] & 0x10)
-          hidBtns |= (1 << 0); // A
-        if (d[6] & 0x20)
-          hidBtns |= (1 << 1); // B
-        if (d[6] & 0x40)
-          hidBtns |= (1 << 2); // X
-        if (d[6] & 0x80)
-          hidBtns |= (1 << 3); // Y
-        if (d[6] & 0x01)
-          hidBtns |= (1 << 4); // LB
-        if (d[6] & 0x02)
-          hidBtns |= (1 << 5); // RB
-        if (d[7] & 0x20)
-          hidBtns |= (1 << 8); // Back
-        if (d[7] & 0x10)
-          hidBtns |= (1 << 9); // Start
-        if (d[7] & 0x40)
-          hidBtns |= (1 << 10); // LS
-        if (d[7] & 0x80)
-          hidBtns |= (1 << 11); // RS
         if (d[7] & 0x01)
-          hidBtns |= (1 << 12); // D-Up
+          hidBtns |= (1u << 0); // D-Up
         if (d[7] & 0x02)
-          hidBtns |= (1 << 13); // D-Down
+          hidBtns |= (1u << 1); // D-Down
         if (d[7] & 0x04)
-          hidBtns |= (1 << 14); // D-Left
+          hidBtns |= (1u << 2); // D-Left
         if (d[7] & 0x08)
-          hidBtns |= (1 << 15); // D-Right
+          hidBtns |= (1u << 3); // D-Right
+        if (d[7] & 0x10)
+          hidBtns |= (1u << 4); // Start
+        if (d[7] & 0x20)
+          hidBtns |= (1u << 5); // Back
+        if (d[7] & 0x40)
+          hidBtns |= (1u << 6); // LS
+        if (d[7] & 0x80)
+          hidBtns |= (1u << 7); // RS
+        if (d[6] & 0x01)
+          hidBtns |= (1u << 8); // LB
+        if (d[6] & 0x02)
+          hidBtns |= (1u << 9); // RB
+        if (d[6] & 0x04)
+          hidBtns |= (1u << 10); // Guide
+        if (d[6] & 0x10)
+          hidBtns |= (1u << 12); // A
+        if (d[6] & 0x20)
+          hidBtns |= (1u << 13); // B
+        if (d[6] & 0x40)
+          hidBtns |= (1u << 14); // X
+        if (d[6] & 0x80)
+          hidBtns |= (1u << 15); // Y
 
         // Build HID report
         if (s_hidBuf) {
